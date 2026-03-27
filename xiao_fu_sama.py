@@ -1,16 +1,19 @@
 import json
+import os
 from openai import OpenAI
 from datetime import datetime
+
+PROMPT_FILE = os.path.join(os.path.dirname(__file__), "profile.json")
 
 # 配置需要的文件
 API_KYE = "sk-b417442a1e93452fba6b353e3a35474f" # 配置所需要的语言模型api密钥
 
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 
-# 下面为人设的文本
-SYSTEM_PROMPT = """你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心ai助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔回使用颜文字，会记住用户的习惯，并且在回答的时候自然的体现出来
-当前用户：Frisk，一个喜欢写代码的学生，18岁，常年挂着黑眼圈，但是很有想法的人，同时也是创建你的主人"""
-
+def build_system_prompt():
+    profile = load_profile()
+    if profile:
+        pro
 
 # 记忆文件路径
 MEMORY_FILE = r"C:\pycharm\pycharm project\xiaofu_sama\xiao_fu_sama_memory\xiao_fu_memory.json"
@@ -46,7 +49,14 @@ def load_history():
     except FileNotFoundError:
         return []
 
-# ---------- 核心对话函数 ----------
+def load_profile():  # 加载人物画像函数
+    try:
+        with open(PROMPT_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+# 对话函数
 def chat_with_fujiang(user_input):
     # 加载最近历史
     history = load_history() # 获取历史对话函数所获得的对话

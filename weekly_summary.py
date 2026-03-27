@@ -1,6 +1,7 @@
 import json
 import os
 from http.client import responses
+from textwrap import indent
 
 from openai import OpenAI
 from datetime import datetime
@@ -58,7 +59,38 @@ def generate_summary(conversations):
         timeout = 0.5,
         max_tokens = 500,
     )
-    summer_text = response.choices[0]
+    summer_text = response.choices[0].message.content
+
+    # 清理可能的markdown标记
+    if "```json" in summer_text:
+        summer_text = summer_text.split("```json")[1].strip("```")[0]
+    elif "```" in summer_text:
+        summer_text = summer_text.split("```")[1].strip("```")[0]
+
+    try:
+        profile = json.loads(summer_text)
+    except json.JSONDecodeError:
+        print("解析JSON失败，原始内容：",summer_text)
+        profile = {"error":"解析失败","raw":summer_text}
+    return profile
+
+def save_profile(profile):
+    with open (PROMPT_FILE, "w",encoding = "utf-8") as f:
+        json.dump(profile,f,ensure_ascii = False,indent = 2)
+
+if __name__ == "__main__":
+    print(f"[{datetime.now()}]开始生成用户画像")
+    convs = load_all_conversations()
+    if not(convs):
+        print("没有对话记录")
+    else:
+        profile = generate_summary(convs)
+        save_profile(profile)
+        print(f"用户画像已保存至{PROMPT_FILE}")
+
+
+
+
 
 
 
