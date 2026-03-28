@@ -6,20 +6,33 @@ from datetime import datetime
 PROMPT_FILE = os.path.join(os.path.dirname(__file__), "profile.json")
 
 # 配置需要的文件
-API_KYE = "sk-b417442a1e93452fba6b353e3a35474f" # 配置所需要的语言模型api密钥
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
-
-def build_system_prompt():
-    profile = load_profile()
-    if profile:
-        pro
 
 # 记忆文件路径
 MEMORY_FILE = r"C:\pycharm\pycharm project\xiaofu_sama\xiao_fu_sama_memory\xiao_fu_memory.json"
 
+
+def build_system_prompt():
+    profile = load_profile()
+    if profile:
+        profile_text = json.dump(profile,ensure_ascii=False, indent=2)
+        return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心AI助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。
+
+        以下是关于用户的一些特征（来自长期记忆），请在对话中自然地体现对这些特征的了解：
+
+        {profile_text}
+
+        当前用户：Frisk，一个喜欢写代码的学生，18岁，常年挂着黑眼圈，但是很有想法的人，同时也是创建你的主人。"""
+    else:
+        return """你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心AI助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。
+
+        当前用户：Frisk，一个喜欢写代码的学生，18岁，常年挂着黑眼圈，但是很有想法的人，同时也是创建你的主人。"""
+
+
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
-client = OpenAI(api_key=API_KYE,base_url=BASE_URL)
+client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url=BASE_URL)
 
 def save_conversation(user_msg, bot_msg):
     """保存一条对话"""
@@ -39,7 +52,7 @@ def load_history():
         with open(MEMORY_FILE, "r", encoding="utf-8") as f: # 读取上面记忆文件的位置
             lines = f.readlines() # 阅读文件内容并赋值到lines这个变量
             # 取最后10条（5轮对话）
-            recent = lines[-100:] if len(lines) >= 100 else lines #  读取{}行数的内容，如果小于{}行数的话则读取所有内容
+            recent = lines[-10:] if len(lines) >= 10 else lines #  读取{}行数的内容，如果小于{}行数的话则读取所有内容
             history = [] # 创建空列表，将历史消息传给大模型
             for line in recent: # 将记忆系统内的数据循环导入的到line
                 data = json.loads(line.strip()) # 读取所获得的文本，并剔除掉多余空格和换行符，并转成json格式
@@ -61,19 +74,20 @@ def chat_with_fujiang(user_input):
     # 加载最近历史
     history = load_history() # 获取历史对话函数所获得的对话
 
+    system_prompt = build_system_prompt()
+
     # 构建消息列表 第一个元素是系统消息人设，历史消息，加上这次用户输入的消息
     messages = [
-                   {"role": "system", "content": SYSTEM_PROMPT}
+                   {"role": "system", "content": system_prompt}
                ] + history + [
                    {"role": "user", "content": user_input}
                ]
-
     # 调用 API
     response = client.chat.completions.create(
         model="deepseek-chat", # 指定模型
         messages=messages, # 导入上面构建的完整对话列表
         temperature=0.8,  # 让它更活泼一点
-        max_tokens=500 # 最大token为500（求你了别烧太快）
+        max_tokens= 200 # 最大token为500（求你了别烧太快）
     )
 
     reply = response.choices[0].message.content # 从返回的相应中提取ai的回答文本

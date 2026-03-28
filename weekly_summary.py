@@ -1,13 +1,10 @@
 import json
 import os
-from http.client import responses
-from textwrap import indent
-
 from openai import OpenAI
 from datetime import datetime
 
 # 配置主要信息
-API_KYE = "sk-b417442a1e93452fba6b353e3a35474f"
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
 BASE_URL = "https://api.deepseek.com/v1"
 
@@ -57,7 +54,7 @@ def generate_summary(conversations):
         model = "deepseek-chat",
         messages = [{"role":"user","content":prompt}],
         timeout = 0.5,
-        max_tokens = 500,
+        max_tokens = 300,
     )
     summer_text = response.choices[0].message.content
 
