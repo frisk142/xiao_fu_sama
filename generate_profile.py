@@ -22,9 +22,6 @@ def load_all_conversations(): # 读取对话记录
         lines = f.readlines()
         conversations = [json.loads(line.strip()) for line in lines]
         return conversations
-
-
-
 def generate_summary(conversations):
     if not conversations :
         return {}
@@ -73,9 +70,34 @@ def generate_summary(conversations):
         profile = {"error":"解析失败","raw":summer_text}
     return profile
 
-def save_profile(profile):
-    with open (PROMPT_FILE, "w",encoding = "utf-8") as f:
-        json.dump(profile,f,ensure_ascii = False,indent = 2)
+def update_profile(new_profile):
+    # 加载目前的画像
+    old_profile = {}
+    try:
+        with open(PROMPT_FILE , "r" ,encoding="utf-8") as f:
+            old_profile = json.load(f)
+    except FileNotFoundError:
+        pass
+
+    # 合并新旧画像
+    merged = old_profile.copy()
+    for key , value in new_profile.items():
+        if key in merged:
+            if isinstance(merged[key],list) and isinstance(value,list):
+                merged[key] = list(set(merged[key] + value))
+            elif isinstance(merged[key],str) and isinstance(value,str):
+                if value not in merged[key]:
+                    merged[key] = merged[key] + "`" + value
+                else:
+                    merged[key] = value
+            else:
+                merged[key] = value
+
+    with open(PROMPT_FILE , "w" , encoding="utf-8") as f:
+        json.dump(merged , f, ensure_ascii = False, indent = 2)
+
+
+
 
 if __name__ == "__main__":
     print(f"[{datetime.now()}]开始生成用户画像")
@@ -84,7 +106,7 @@ if __name__ == "__main__":
         print("没有对话记录")
     else:
         profile = generate_summary(convs)
-        save_profile(profile)
+        update_profile(profile)
         print(f"用户画像已保存至{PROMPT_FILE}")
 
 
