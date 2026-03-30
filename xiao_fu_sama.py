@@ -3,7 +3,6 @@ import os
 from openai import OpenAI
 from datetime import datetime
 
-PROMPT_FILE = os.path.join(os.path.dirname(__file__), "profile.json")
 
 # 配置需要的文件
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
@@ -11,24 +10,25 @@ DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 
 # 记忆文件路径
-MEMORY_FILE = r"C:\pycharm\pycharm project\xiaofu_sama\xiao_fu_sama_memory\xiao_fu_memory.json"
+MEMORY_FILE = os.path.join(os.path.dirname(__file__), "xiao_fu_memory.json")
 
+# 人物画像位置
+PROMPT_FILE = os.path.join(os.path.dirname(__file__), "prompt.json")
 
 def build_system_prompt():
     profile = load_profile()
     if profile:
-        profile_text = json.dump(profile,ensure_ascii=False, indent=2)
+        profile_text = json.dumps(profile,ensure_ascii=False, indent=2)
+        print("已加载人物画像")
         return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心AI助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。
 
         以下是关于用户的一些特征（来自长期记忆），请在对话中自然地体现对这些特征的了解：
 
         {profile_text}
-
-        当前用户：Frisk，一个喜欢写代码的学生，18岁，常年挂着黑眼圈，但是很有想法的人，同时也是创建你的主人。"""
+        当前用户：Frisk，"""
     else:
-        return """你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心AI助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。
-
-        当前用户：Frisk，一个喜欢写代码的学生，18岁，常年挂着黑眼圈，但是很有想法的人，同时也是创建你的主人。"""
+        print("未能成功加载人物画像")
+        return """你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心AI助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。"""
 
 
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
@@ -70,10 +70,10 @@ def load_profile():  # 加载人物画像函数
         return {}
 
 # 对话函数
-def chat_with_fujiang(user_input):
+def chat_with_fu_jiang(user_input):
     # 加载最近历史
     history = load_history() # 获取历史对话函数所获得的对话
-
+    load_Characterfile = load_profile()
     system_prompt = build_system_prompt()
 
     # 构建消息列表 第一个元素是系统消息人设，历史消息，加上这次用户输入的消息
@@ -82,12 +82,13 @@ def chat_with_fujiang(user_input):
                ] + history + [
                    {"role": "user", "content": user_input}
                ]
+    print(messages)
     # 调用 API
     response = client.chat.completions.create(
         model="deepseek-chat", # 指定模型
         messages=messages, # 导入上面构建的完整对话列表
         temperature=0.8,  # 让它更活泼一点
-        max_tokens= 200 # 最大token为500（求你了别烧太快）
+        max_tokens= 400 # 最大token为500（求你了别烧太快）
     )
 
     reply = response.choices[0].message.content # 从返回的相应中提取ai的回答文本
@@ -103,5 +104,5 @@ if __name__ == "__main__":
         user_input = input("\n你：")
         if user_input.lower() in ["quit", "exit", "退出"]:
             break
-        reply = chat_with_fujiang(user_input)
+        reply = chat_with_fu_jiang(user_input)
         print(f"小芙酱：{reply}")

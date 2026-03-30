@@ -2,21 +2,23 @@ import json
 import os
 from openai import OpenAI
 from datetime import datetime
+import re
 
-# 配置主要信息
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+# 配置主要信息,选择调用前面创建的系统变量
+DEEPSEEK_API_KEY = os.environ.get("XIAO_FU_MEMORY")
 
 BASE_URL = "https://api.deepseek.com/v1"
 
 # 文件路径
-MEMORY_FILE = os.path.join(os.path.dirname(__file__), "memory.json") # 记忆文件位置
+MEMORY_FILE = os.path.join(os.path.dirname(__file__), "xiao_fu_memory.json") # 记忆文件位置
 
 PROMPT_FILE = os.path.join(os.path.dirname(__file__), "prompt.json") # 配置文件保存
+print(PROMPT_FILE)
 
-client = OpenAI(api_key=API_KYE,base_url=BASE_URL)
+client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url=BASE_URL)
 
 def load_all_conversations(): # 读取对话记录
-    with open(MEMORY_FILE) as f:
+    with open(MEMORY_FILE , encoding="UTF-8") as f:
         lines = f.readlines()
         conversations = [json.loads(line.strip()) for line in lines]
         return conversations
@@ -45,6 +47,7 @@ def generate_summary(conversations):
     - personality: 性格特征（从对话中感知）
 
     请只输出JSON，不要其他解释。
+    必须闭合完整可直接json.loads解析
 
     对话记录：
     {text_for_summary}
@@ -53,16 +56,15 @@ def generate_summary(conversations):
     response = client.chat.completions.create(
         model = "deepseek-chat",
         messages = [{"role":"user","content":prompt}],
-        timeout = 0.5,
-        max_tokens = 300,
+        timeout = 60,
+        max_tokens = 8192,
     )
     summer_text = response.choices[0].message.content
+    print(summer_text)
 
-    # 清理可能的markdown标记
-    if "```json" in summer_text:
-        summer_text = summer_text.split("```json")[1].strip("```")[0]
-    elif "```" in summer_text:
-        summer_text = summer_text.split("```")[1].strip("```")[0]
+    summer_text = re.sub(r'^```json\s*', '', summer_text)
+    summer_text = re.sub(r'\s*```$', '', summer_text)
+    summer_text = summer_text.strip()
 
     try:
         profile = json.loads(summer_text)
