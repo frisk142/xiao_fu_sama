@@ -10,7 +10,7 @@ DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 
 # 计数器位置
-COUNT_file = os.path.join(os.path.dirname(__file__),"count.json")
+COUNT_file = os.path.join(os.path.dirname(__file__),"COUN_file")
 
 # 记忆文件路径
 MEMORY_FILE = os.path.join(os.path.dirname(__file__), "xiao_fu_memory.json")
@@ -65,7 +65,7 @@ def load_history(): # 加载最近对话
 
 def get_count(): # 创建计数器文件
     try:
-        with open("COUNT_file" , "r" , encoding="utf-8") as f:
+        with open("COUN_file" , "r" , encoding="utf-8") as f:
             data = json.load(f)
             return data.get("rounds",0)
 
@@ -99,6 +99,7 @@ def chat_with_fu_jiang(user_input):
                ] + history + [
                    {"role": "user", "content": user_input}
                ]
+
     # 调用 API
     response = client.chat.completions.create(
         model="deepseek-chat", # 指定模型
@@ -113,9 +114,9 @@ def chat_with_fu_jiang(user_input):
     # 保存记忆
     save_conversation(user_input, reply)
 
-    round = get_count() + 1
-    set_count(round)
-    if round >= 50: # 当get_count每调用一次就加一，round大于50时，运行画像文件
+    rounds = get_count() + 1
+    set_count(rounds)
+    if rounds >= 50: # 当get_count每调用一次就加一，round大于50时，运行画像文件
         import subprocess
         subprocess.Popen(["python", "generate_profile.py"])
         set_count(0)
