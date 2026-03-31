@@ -13,10 +13,10 @@ BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 COUNT_file = os.path.join(os.path.dirname(__file__),"COUN_file")
 
 # 记忆文件路径
-MEMORY_FILE = os.path.join(os.path.dirname(__file__), "xiao_fu_memory.json")
+MEMORY_FILE = os.path.join(os.path.dirname(__file__),"xiao_fu_memory", "xiao_fu_memory.json")
 
 # 人物画像位置
-PROMPT_FILE = os.path.join(os.path.dirname(__file__), "prompt.json")
+PROMPT_FILE = os.path.join(os.path.dirname(__file__),"prompt", "prompt.json")
 
 def build_system_prompt():
     profile = load_profile()
@@ -118,7 +118,7 @@ def chat_with_fu_jiang(user_input):
     set_count(rounds)
     if rounds >= 50: # 当get_count每调用一次就加一，round大于50时，运行画像文件
         import subprocess
-        subprocess.Popen(["python", "generate_profile.py"])
+        subprocess.Popen(["python", r"Function/generate_profile.py"])
         set_count(0)
 
     return reply # 返回回答
