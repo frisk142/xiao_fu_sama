@@ -104,7 +104,7 @@ def chat_with_fu_jiang(user_input):
         model="deepseek-chat", # 指定模型
         messages=messages, # 导入上面构建的完整对话列表
         temperature=0.7,  # 让它更活泼一点
-        max_tokens= 400, # 最大token为500（求你了别烧太快）
+        max_tokens= 500, # 最大token为500（求你了别烧太快）
         frequency_penalty = 0.2
     )
 
