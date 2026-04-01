@@ -1,6 +1,6 @@
 from flask import Flask,request
 import os
-from xiaofu_sama.xiao_fu_sama import chat_with_fu_jiang,set_count,get_count
+from xiaofu_sama.xiao_fu_sama import chat_with_fu_jiang
 
 app = Flask(__name__) # 创建Flask实例
 
@@ -22,9 +22,6 @@ def chat():
 
     # 调用小芙的对话参数
     reply = chat_with_fu_jiang(user_msg)
-    rounds = get_count() + 1 # 小芙每次回复让计数器+1
-    print("计数器+1")
-    set_count(rounds)
     return reply
 
 

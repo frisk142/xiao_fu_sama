@@ -9,7 +9,7 @@ DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 
 # 计数器位置
-COUNT_file = os.path.join(os.path.dirname(__file__),"COUN_file")
+COUNT_file = os.path.join(os.path.dirname(__file__),"COUNT_file")
 
 # 记忆文件路径
 MEMORY_FILE = os.path.join(os.path.dirname(__file__),"xiao_fu_memory", "xiao_fu_memory.json")
@@ -64,16 +64,17 @@ def load_history(): # 加载最近对话
 
 def get_count(): # 创建计数器文件
     try:
-        with open("COUN_file" , "r" , encoding="utf-8") as f:
+        with open(COUNT_file , "r" , encoding="utf-8") as f:
+            print(COUNT_file)
             data = json.load(f)
             return data.get("rounds",0)
-
     except FileNotFoundError:
         return 0
 
 def set_count(count):
     try:
-        with open("COUN_file" , "w" , encoding="utf-8") as f:
+        with open(COUNT_file , "w" , encoding="utf-8") as f:
+            print(COUNT_file)
             json.dump({"rounds": count}, f)
     except FileNotFoundError:
         print("未能成功添加")
@@ -114,8 +115,9 @@ def chat_with_fu_jiang(user_input):
     save_conversation(user_input, reply)
 
     rounds = get_count() + 1
+    print("计数器加一")
     set_count(rounds)
-    if rounds >= 50: # 当get_count每调用一次就加一，round大于50时，运行画像文件
+    if rounds % 50 == 0: # 当get_count每调用一次就加一，round大于50时，运行画像文件
         import subprocess
         subprocess.Popen(["python", r"Function/generate_profile.py"])
         set_count(0)
