@@ -21,6 +21,7 @@ class XiaofuGui:
             bg = "#F9F9F9",
             fg = "#333333",
             relief=tk.FLAT,
+            insertbackground= "#E94F6F",
             borderwidth=0,
         )
         self.chat_area.pack(padx = 15 , pady = (15 , 10) , fill = tk.BOTH , expand=True)
