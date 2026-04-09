@@ -10,7 +10,6 @@ class XiaofuGui:
         self.window = tb.Window(themename = "minty")
         self.window.title("小芙酱")
         self.window.geometry("750x650")
-        self.window.resizable(width=False, height=False)
 
         # self.window.iconbitmap("xiao_fu.ico")
         # 显示聊天区域

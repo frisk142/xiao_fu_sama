@@ -10,9 +10,11 @@ DEEPSEEK_API_KEY = os.environ.get("XIAO_FU_MEMORY")
 BASE_URL = "https://api.deepseek.com/v1"
 
 # 文件路径
-MEMORY_FILE = os.path.join(os.path.dirname(__file__), "xiao_fu_memory.json") # 记忆文件位置
+BASE_DIR = os.path.dirname(os.path.dirname(__file__)) # 定位至根目录
 
-PROMPT_FILE = os.path.join(os.path.dirname(__file__), "prompt.json") # 配置文件保存
+MEMORY_FILE = os.path.join(BASE_DIR, "xiao_fu_memory" ,"xiao_fu_memory.json") # 记忆文件位置
+
+PROMPT_FILE = os.path.join(BASE_DIR, "prompt" , "prompt.json") # 配置文件保存
 print(PROMPT_FILE)
 
 client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url=BASE_URL)
