@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import scrolledtext
 import threading
 import ttkbootstrap as tb
-from ttkbootstrap.constants import *
 from xiaofu_sama.xiao_fu_sama import chat_with_fu_jiang
 
 class XiaofuGui:
@@ -23,25 +22,27 @@ class XiaofuGui:
             insertbackground= "#E94F6F",
             borderwidth=0,
         )
-        self.chat_area.pack(padx = 15 , pady = (15 , 10) , fill = tk.BOTH , expand=True)
-        self.chat_area.config(state = tk.DISABLED)
+
+        self.chat_area.pack(padx = 15 , pady = (15 , 10) , fill = tk.BOTH , expand=True) # 将文本框放入窗口
+        self.chat_area.config(state = tk.DISABLED) # 只读
 
         # 消息标签样式
         self.chat_area.tag_config("user",foreground="#4A90E2",font=("微软雅黑",10))
-        self.chat_area.tag_config("bot",foreground="#E94F6F",font=("微软雅黑",10))
+        self.chat_area.tag_config("bot",foreground="#49f2b4",font=("微软雅黑",10))
 
         # 底部输入区域
         self.input_frame = tb.Frame(self.window)
         self.input_frame.pack(padx = 15, pady = (0,15), fill = tk.X)
-        self.input_entry = tb.Entry(self.input_frame, font=("微软雅黑",10))
-        self.input_entry.pack(side = tk.LEFT, fill = tk.X, expand = True, padx=(0,10))
-        self.input_entry.bind("<Return>",self.send_message)
-        self.send_btn = tb.Button(self.input_frame,text = "发送", command = self.send_message, bootstyle= "primary")
+        self.input_entry = tb.Entry(self.input_frame, font=("微软雅黑",10)) # 单行输入框
+        self.input_entry.pack(side = tk.LEFT, fill = tk.X, expand = True, padx=(0,10)) # 放置框架左侧，水平填充
+        self.input_entry.bind("<Return>",self.send_message) # 点击回车调用send_message模块
+        self.send_btn = tb.Button(self.input_frame,text = "发送", command = self.send_message, bootstyle= "primary") # 在输入框放置发送按钮
         self.send_btn.pack(side = tk.RIGHT)
 
         # 欢迎语
         self.add_message("小芙酱","主人，我准备好啦，今天有什么可以帮助你的吗？", is_user = False)
 
+        # 窗口循环
         self.window.mainloop()
 
         # 设置添加语句模块
