@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charest = "utf-8">
+  <meta charset = "utf-8">
   <title>小芙酱.桌宠</title>
   <link rel = "stylesheet" type = "text/css" href = "waifu/waifu.css"/>
   <style>
@@ -46,10 +46,28 @@
     <!-- live2D-widget 会在这里生成看板娘 -->
     <div class = "input-area">
       <input type = "text" id = "input-text" placeholder = "说点什么？...">
-      <button id = "send-btn">发送</button>>
+      <button id = "send-btn">发送</button>
     </div>
 
-    <script scr>
+    <script src = "https://cdn.jsdelivr.net/npm/jquery@3.1/dist/jquery.min.js"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/jquery-ui@1.12.1/jquery-ui.min.js"></script>
+    <script src = "waifu/waifu.js"></script>
+    <script>
+        //等待live2D-widget初始化完成（延时）
+        setTimeout(() => {
+        console.log("小芙已上线");
+
+        // 默认显示一条欢迎语句
+
+        if(window.loadlive2d){
+          if (typeof window.showMessage === "function") {
+            window.showMessage("主人我准备好啦",5000);
+          }
+        }
+    },1000);
+    </script>
+</body>
+</html>
 
 
 
