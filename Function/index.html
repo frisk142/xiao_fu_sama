@@ -4,5 +4,55 @@
   <meta charest = "utf-8">
   <title>小芙酱.桌宠</title>
   <link rel = "stylesheet" type = "text/css" href = "waifu/waifu.css"/>
+  <style>
+    body{
+    margin: 0;
+    overflow: hidden;
+    background-color: transparent;
+    }
+
+    /* 自定义输入框区域 */
+    .input-area{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 30px;
+    padding: 6px 12px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+    }
+
+    #input-text{
+    width: 180px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: none;
+    font-size: 13px;
+    }
+
+    #send-btn{
+    background: #ff8da1;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: white;
+    cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <!-- live2D-widget 会在这里生成看板娘 -->
+    <div class = "input-area">
+      <input type = "text" id = "input-text" placeholder = "说点什么？...">
+      <button id = "send-btn">发送</button>>
+    </div>
+
+    <script scr>
+
+
+
+
 
 
