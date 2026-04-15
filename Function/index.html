@@ -1,76 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset = "utf-8">
-  <title>小芙酱.桌宠</title>
-  <link rel = "stylesheet" type = "text/css" href = "waifu/waifu.css"/>
-  <style>
-    body{
-    margin: 0;
-    overflow: hidden;
-    background-color: transparent;
-    }
-
-    /* 自定义输入框区域 */
-    .input-area{
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background: rgba(0,0,0,0.6);
-    border-radius: 30px;
-    padding: 6px 12px;
-    display: flex;
-    gap: 8px;
-    z-index: 1000;
-    }
-
-    #input-text{
-    width: 180px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: none;
-    font-size: 13px;
-    }
-
-    #send-btn{
-    background: #ff8da1;
-    border: none;
-    border-radius: 20px;
-    padding: 5px 15px;
-    color: white;
-    cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>小芙酱 · 桌宠</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: transparent;
+        }
+        /* 自定义输入框区域 */
+        .input-area {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 30px;
+            padding: 6px 12px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+        }
+        #input-text {
+            width: 180px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            font-size: 13px;
+        }
+        #send-btn {
+            background: #ff8da1;
+            border: none;
+            border-radius: 20px;
+            padding: 5px 15px;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <!-- live2D-widget 会在这里生成看板娘 -->
-    <div class = "input-area">
-      <input type = "text" id = "input-text" placeholder = "说点什么？...">
-      <button id = "send-btn">发送</button>
+    <div class="input-area">
+        <input type="text" id="input-text" placeholder="说点什么？...">
+        <button id="send-btn">发送</button>
     </div>
 
-    <script src = "https://cdn.jsdelivr.net/npm/jquery@3.1/dist/jquery.min.js"></script>
-    <script src = "https://cdn.jsdelivr.net/npm/jquery-ui@1.12.1/jquery-ui.min.js"></script>
-    <script src = "waifu/waifu.js"></script>
+    <!-- 先加载依赖 -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui@1.12.1/jquery-ui.min.js"></script>
+    <!-- 加载 live2d-widget（会自动拉取模型和样式） -->
+    <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
+
+    <!-- 用于与 Python 通信的 Qt WebChannel -->
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <script>
-        //等待live2D-widget初始化完成（延时）
-        setTimeout(() => {
-        console.log("小芙已上线");
+        // 全局 bridge 对象
+        let bridge = null;
 
-        // 默认显示一条欢迎语句
+        // 连接 WebChannel
+        window.addEventListener('load', () => {
+            if (typeof qt !== 'undefined' && qt.webChannelTransport) {
+                new QWebChannel(qt.webChannelTransport, (channel) => {
+                    bridge = channel.bridge;
+                    console.log("WebChannel 已连接");
+                    // 连接成功后显示欢迎语（调用 live2d-widget 的 showMessage）
+                    setTimeout(() => {
+                        if (typeof window.showMessage === 'function') {
+                            window.showMessage("✨ 小芙酱：主人，我准备好啦～", 5000);
+                        }
+                    }, 500);
+                });
+            } else {
+                console.warn("非 Qt 环境，通信功能不可用");
+            }
+        });
 
-        if(window.loadlive2d){
-          if (typeof window.showMessage === "function") {
-            window.showMessage("主人我准备好啦",5000);
-          }
-        }
-    },1000);
+        // 发送消息按钮
+        document.getElementById('send-btn').addEventListener('click', () => {
+            const input = document.getElementById('input-text');
+            const text = input.value.trim();
+            if (text === "") return;
+            if (bridge && bridge.sendToPython) {
+                bridge.sendToPython(text);
+                input.value = "";
+                if (typeof window.showMessage === 'function') {
+                    window.showMessage("✨ 小芙酱：思考中...", 3000);
+                }
+            } else {
+                console.warn("bridge 未就绪");
+                alert("小芙酱还没连上，稍等片刻～");
+            }
+        });
+
+        // 回车发送
+        document.getElementById('input-text').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('send-btn').click();
+        });
     </script>
 </body>
 </html>
-
-
-
-
-
-
