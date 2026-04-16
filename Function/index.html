@@ -45,14 +45,16 @@
         <button id="send-btn">发送</button>
     </div>
 
-    <!-- 先加载依赖 -->
+    <!-- 用于与 Python 通信的 Qt WebChannel -->
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+
+    <!-- 加载依赖 -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-ui@1.12.1/jquery-ui.min.js"></script>
+
     <!-- 加载 live2d-widget（会自动拉取模型和样式） -->
     <script src="https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js"></script>
 
-    <!-- 用于与 Python 通信的 Qt WebChannel -->
-    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <script>
         // 全局 bridge 对象
         let bridge = null;
@@ -61,14 +63,14 @@
         window.addEventListener('load', () => {
             if (typeof qt !== 'undefined' && qt.webChannelTransport) {
                 new QWebChannel(qt.webChannelTransport, (channel) => {
-                    bridge = channel.bridge;
+                    bridge = channel.objects.bridge;
                     console.log("WebChannel 已连接");
                     // 连接成功后显示欢迎语（调用 live2d-widget 的 showMessage）
                     setTimeout(() => {
                         if (typeof window.showMessage === 'function') {
                             window.showMessage("✨ 小芙酱：主人，我准备好啦～", 5000);
                         }
-                    }, 500);
+                    }, 1500);
                 });
             } else {
                 console.warn("非 Qt 环境，通信功能不可用");
