@@ -12,8 +12,8 @@ bate_dir = os.path.dirname(__file__)
 index_file = os.path.join(bate_dir, "index.html")
 
 
+# 通信桥接
 class Bridge(QObject):
-    """JS 与 Python 通信桥接"""
     @pyqtSlot(str)
     def sendToPython(self, text):
         print(f"[用户] {text}")
@@ -24,24 +24,28 @@ class Bridge(QObject):
             QTimer.singleShot(0, lambda: self.view.page().runJavaScript(f"window.showMessage('{reply}', 5000)"))
         threading.Thread(target=call, daemon=True).start()
 
+# 定义桌宠窗口类 继承主窗口
 class DesktopPet(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        # 设置窗口样式
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool )
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setGeometry(100, 100, 500, 600)
 
+        # 创建网络组件
         self.webview = QWebEngineView(self)
         self.webview.setGeometry(0, 0, 500, 600)
         self.webview.setAttribute(Qt.WA_TranslucentBackground)
         self.webview.page().setBackgroundColor(Qt.transparent)
 
         # 设置 WebChannel
+        # 这段有意思，创建一个Bridge桥对象，然后把组件赋值于桥，让桥可以操控网页
         self.channel = QWebChannel()
         self.bridge = Bridge()
-        self.bridge.view = self.webview
-        self.channel.registerObject("bridge", self.bridge)
-        self.webview.page().setWebChannel(self.channel)
+        self.bridge.view = self.webview # 创建桥对象
+        self.channel.registerObject("bridge", self.bridge) # 注册桥对象，js检索Bridge
+        self.webview.page().setWebChannel(self.channel) # 绑定通信通道至网页
 
         # 加载 HTML
         self.webview.load(QUrl.fromLocalFile(index_file))
@@ -53,6 +57,7 @@ class DesktopPet(QMainWindow):
         self.webview.mouseMoveEvent = self.mouseMoveEvent
         self.webview.mouseReleaseEvent = self.mouseReleaseEvent
 
+    # 与窗口拖拽有关，但未能整理
     def mousePressEvent(self, event):
         self.drag_pos = event.globalPos()
     def mouseMoveEvent(self, event):
