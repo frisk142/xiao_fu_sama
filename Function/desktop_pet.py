@@ -37,13 +37,13 @@ class DesktopPet(QMainWindow):
         self.webview = QWebEngineView(self)
         self.webview.setGeometry(0, 0, 500, 600)
         self.webview.setAttribute(Qt.WA_TranslucentBackground)
-        self.webview.page().setBackgroundColor(Qt.transparent)
+        self.webview.page().setBackgroundColor(Qt.transparent) # 透明网页
 
         # 设置 WebChannel
         # 这段有意思，创建一个Bridge桥对象，然后把组件赋值于桥，让桥可以操控网页
         self.channel = QWebChannel()
-        self.bridge = Bridge()
-        self.bridge.view = self.webview # 创建桥对象
+        self.bridge = Bridge() # 创建通信桥对象
+        self.bridge.view = self.webview # 把网络组件赋值给桥
         self.channel.registerObject("bridge", self.bridge) # 注册桥对象，js检索Bridge
         self.webview.page().setWebChannel(self.channel) # 绑定通信通道至网页
 

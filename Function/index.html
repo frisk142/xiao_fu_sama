@@ -2,13 +2,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>小芙酱 · 桌宠</title>
+    <title>小芙酱</title>
     <style>
+
+        /* 页面整体 */
         body {
             margin: 0;
             overflow: hidden;
             background-color: transparent;
         }
+
         /* 自定义输入框区域 */
         .input-area {
             position: fixed;
@@ -21,6 +24,8 @@
             gap: 8px;
             z-index: 1000;
         }
+
+        /* 输入框 */
         #input-text {
             width: 180px;
             padding: 5px 12px;
@@ -29,6 +34,8 @@
             outline: none;
             font-size: 13px;
         }
+
+        /* 发送按钮 */
         #send-btn {
             background: #ff8da1;
             border: none;
@@ -57,13 +64,13 @@
 
     <script>
         // 全局 bridge 对象
-        let bridge = null;
+        let bridge = null; // 初始化为null
 
         // 连接 WebChannel
         window.addEventListener('load', () => {
             if (typeof qt !== 'undefined' && qt.webChannelTransport) {
                 new QWebChannel(qt.webChannelTransport, (channel) => {
-                    bridge = channel.objects.bridge;
+                    bridge = channel.objects.bridge; // python的通信桥
                     console.log("WebChannel 已连接");
                     // 连接成功后显示欢迎语（调用 live2d-widget 的 showMessage）
                     setTimeout(() => {
