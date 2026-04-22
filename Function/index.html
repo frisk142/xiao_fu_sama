@@ -57,7 +57,7 @@
         padding: 10px;
         word-wrap: break-word;
         position: fixed;
-        top: 450px;
+        top: 270px;
         }
 
         /* 隐藏看板娘自带的整个对话框容器 */
@@ -92,7 +92,7 @@
         window.addEventListener('load', () => {
             if (typeof qt !== 'undefined' && qt.webChannelTransport) {
                 new QWebChannel(qt.webChannelTransport, (channel) => {
-                    bridge = channel.bridge; // python的通信桥
+                    bridge = channel.objects.bridge; // python的通信桥
                     console.log("WebChannel 已连接");
                     // 连接成功后显示欢迎语（调用 live2d-widget 的 showMessage）
                     setTimeout(() => {

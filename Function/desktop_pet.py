@@ -20,8 +20,9 @@ class Bridge(QObject):
         def call():
             reply = chat_with_fu_jiang(text)
             print(reply)
+
             # 在主线程中执行 JS 显示回复
-            QTimer.singleShot(0, lambda: self.view.page().runJavaScript(f"window.showMessage('{reply}', 5000)"))
+            QTimer.singleShot(0, lambda: self.view.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{reply}"'))
         threading.Thread(target=call, daemon=True).start()
 
 # 定义桌宠窗口类 继承主窗口
