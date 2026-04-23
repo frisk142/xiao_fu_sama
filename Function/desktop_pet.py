@@ -1,12 +1,19 @@
 import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+sys.stdout.reconfigure(encoding = "utf-8")
+
+import os
+import sys
 import threading
 from PyQt5.QtCore import QUrl, QObject, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt
-from xiaofu_sama.xiao_fu_sama import chat_with_fu_jiang
-import os
+from xiao_fu_sama import chat_with_fu_jiang
+
+
 
 bate_dir = os.path.dirname(__file__)
 index_file = os.path.join(bate_dir, "index.html")
@@ -15,9 +22,7 @@ index_file = os.path.join(bate_dir, "index.html")
 # 通信桥接
 class Bridge(QObject):
     def show_reply(self, reply):
-        self.view.page().runJavaScript(f'''
-            document.getElementById('reply-box').innerText = `{reply}`
-        ''')
+        self.view.page().runJavaScript(f'''document.getElementById('reply-box').innerText = `{reply}` ''')
 
     @pyqtSlot(str)
     def sendToPython(self, text):
