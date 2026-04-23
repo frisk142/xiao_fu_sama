@@ -94,10 +94,10 @@
                 new QWebChannel(qt.webChannelTransport, (channel) => {
                     bridge = channel.objects.bridge; // python的通信桥
                     console.log("WebChannel 已连接");
-                    // 连接成功后显示欢迎语（调用 live2d-widget 的 showMessage）
+                    // 连接成功后显示欢迎语（选择调用新创建的文本框）
                     setTimeout(() => {
-                        if (typeof window.showMessage === 'function') {
-                            window.showMessage("✨ 小芙酱：主人，我准备好啦～", 5000);
+                        if (typeof document.getElementById === 'function') {
+                            document.getElementById("reply-box").innerText = "✨ 小芙酱：主人，我准备好啦～" ;
                         }
                     }, 1500);
                 });
@@ -114,8 +114,8 @@
             if (bridge && bridge.sendToPython) {
                 bridge.sendToPython(text);
                 input.value = "";
-                if (typeof window.showMessage === 'function') {
-                    window.showMessage("✨ 小芙酱：思考中...", 3000);
+                if (typeof document.getElementById === 'function') {
+                    document.getElementById("reply-box").innerText = "✨ 小芙酱：思考中...";
                 }
             } else {
                 console.warn("bridge 未就绪");
@@ -127,6 +127,15 @@
         document.getElementById('input-text').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') document.getElementById('send-btn').click();
         });
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>
+

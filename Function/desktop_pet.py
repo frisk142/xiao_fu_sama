@@ -14,15 +14,23 @@ index_file = os.path.join(bate_dir, "index.html")
 
 # 通信桥接
 class Bridge(QObject):
+    def show_reply(self, reply):
+        self.view.page().runJavaScript(f'''
+            document.getElementById('reply-box').innerText = `{reply}`
+        ''')
+
     @pyqtSlot(str)
     def sendToPython(self, text):
         print(f"[用户] {text}")
+
         def call():
             reply = chat_with_fu_jiang(text)
-            print(reply)
+            print(f"小芙酱：{reply}")
+            print(len(reply))
 
-            # 在主线程中执行 JS 显示回复
-            QTimer.singleShot(0, lambda: self.view.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{reply}"'))
+            QTimer.singleShot(0, lambda: self.show_reply(reply))
+
+        # 启动子线程
         threading.Thread(target=call, daemon=True).start()
 
 # 定义桌宠窗口类 继承主窗口
