@@ -21,8 +21,13 @@ index_file = os.path.join(bate_dir, "index.html")
 
 # 通信桥接
 class Bridge(QObject):
+    def __init__(self,page):
+        super().__init__()
+        self.page = page
+        
     def show_reply(self, reply):
-        self.view.page().runJavaScript(f'''document.getElementById('reply-box').innerText = `{reply}` ''')
+        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "{reply}"') # 理论上来说应该能跑的，但是不应该啊
+        print(reply)
 
     @pyqtSlot(str)
     def sendToPython(self, text):
@@ -56,7 +61,7 @@ class DesktopPet(QMainWindow):
         # 设置 WebChannel
         # 这段有意思，创建一个Bridge桥对象，然后把组件赋值于桥，让桥可以操控网页
         self.channel = QWebChannel()
-        self.bridge = Bridge() # 创建通信桥对象
+        self.bridge = Bridge(self.webview.page()) # 创建通信桥对象
         self.bridge.view = self.webview # 把网络组件赋值给桥
         self.channel.registerObject("bridge", self.bridge) # 注册桥对象，js检索Bridge
         self.webview.page().setWebChannel(self.channel) # 绑定通信通道至网页
