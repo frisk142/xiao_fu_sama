@@ -12,7 +12,7 @@ from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt
 from xiao_fu_sama import chat_with_fu_jiang
-
+from PyQt5.QtCore import pyqtSignal
 
 
 bate_dir = os.path.dirname(__file__)
@@ -20,13 +20,16 @@ index_file = os.path.join(bate_dir, "index.html")
 
 
 # 通信桥接
+# 这里需要使用pyqt5的信号方式，子线程无法直接调用主线程的函数，所以需要要信号来传递数据，主线程接收到信号之后刷新ui
 class Bridge(QObject):
+    reply_signal = pyqtSignal(str) # 定义一个字符串类型的信号，用于传递回复内容
     def __init__(self,page):
         super().__init__()
         self.page = page
+        self.reply_signal.connect(self.show_reply) # 将信号连接到显示回复的槽函数
         
     def show_reply(self, reply):
-        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "{reply}"') # 理论上来说应该能跑的，但是不应该啊
+        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "replybox前端渲染测试"') # 理论上来说应该能跑的，但是不应该啊
         print(reply)
 
     @pyqtSlot(str)
@@ -35,10 +38,9 @@ class Bridge(QObject):
 
         def call():
             reply = chat_with_fu_jiang(text)
-            print(f"小芙酱：{reply}")
-            print(len(reply))
-
-            QTimer.singleShot(0, lambda: self.show_reply(reply))
+            # print(f"小芙酱：{reply}")
+            # print(len(reply))
+            self.reply_signal.emit(reply)
 
         # 启动子线程
         threading.Thread(target=call, daemon=True).start()
