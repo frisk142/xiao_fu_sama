@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0e83a2d7-ddda-4793-9234-3694b45ec026" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/COUNT_file" beforeDir="false" afterPath="$PROJECT_DIR$/COUNT_file" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Function/desktop_pet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Function/desktop_pet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Function/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Function/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/xiao_fu_memory/xiao_fu_memory.json" beforeDir="false" afterPath="$PROJECT_DIR$/xiao_fu_memory/xiao_fu_memory.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="3Cy8xUZS7Ht241AgTcYAjbZmKVH" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-3944b0c99280-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.127" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="0e83a2d7-ddda-4793-9234-3694b45ec026" name="更改" comment="" />
+      <created>1777346699118</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777346699118</updated>
+    </task>
+    <servers />
+  </component>
+</project>

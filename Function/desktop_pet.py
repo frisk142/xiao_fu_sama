@@ -13,6 +13,7 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
+import json
 
 
 bate_dir = os.path.dirname(__file__)
@@ -29,7 +30,8 @@ class Bridge(QObject):
         self.reply_signal.connect(self.show_reply) # 将信号连接到显示回复的槽函数
         
     def show_reply(self, reply):
-        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "replybox前端渲染测试"') # 理论上来说应该能跑的，但是不应该啊
+        safe_reply = json.dumps(reply)
+        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}') # 理论上来说应该能跑的，但是不应该啊
         print(reply)
 
     @pyqtSlot(str)
