@@ -2,6 +2,8 @@ import json
 import os
 from openai import OpenAI
 from datetime import datetime
+import sys
+sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置需要的文件
 DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
@@ -22,7 +24,7 @@ def build_system_prompt():
     if profile:
         profile_text = json.dumps(profile,ensure_ascii=False, indent=2)
         print("已加载人物画像")
-        return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。不用小标题，不大量换行
+        return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。不用小标题，不大量换行，确保每次生成都可以生成完成的回复，除非用户输入的内容过长或者过于复杂。
 
         以下是关于用户的一些特征（来自长期记忆），请在对话中自然地体现对这些特征的了解：
 
@@ -102,11 +104,11 @@ def chat_with_fu_jiang(user_input):
 
     # 调用 API
     response = client.chat.completions.create(
-        model="deepseek-chat", # 指定模型
+        model="deepseek-v4-flash", # 指定模型
         messages=messages, # 导入上面构建的完整对话列表
         temperature=0.7,  # 让它更活泼一点
         max_tokens= 500, # 最大token为500（求你了别烧太快）
-        frequency_penalty = 0.2
+        frequency_penalty = 0.2,
     )
 
     reply = response.choices[0].message.content # 从返回的相应中提取ai的回答文本

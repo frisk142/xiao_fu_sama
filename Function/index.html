@@ -47,7 +47,7 @@
 
         /* 小芙回答框 */
         #reply-box {
-        background: rgba(255,248,205,0.7);
+        background: rgba(255,248,205,0.8);
         width: 320px;
         height: 150px;
         border: none;
@@ -63,6 +63,17 @@
         scrollbar-width: none; 
         -ms-overflow-style: none;
     }
+        /* reply-box开关 */
+        #reply_switch{
+            position: absolute;
+            top: 210px;
+            font-size: 16px;
+            z-index: 1000;
+            width: 150px;
+            height: 150px;
+            right: 40px;
+
+        }
     
         /*隐藏滚动条*/
         #reply-box::-webkit-scrollbar {
@@ -73,6 +84,7 @@
         #waifu-tips {
             display: none !important;
             }
+
     </style>
 </head>
 <body>
@@ -83,6 +95,9 @@
 
     <div id="reply-box">
     </div>
+    <div id  = "reply_switch">❌</div>
+
+    
 
     <!-- 用于与 Python 通信的 Qt WebChannel -->
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>

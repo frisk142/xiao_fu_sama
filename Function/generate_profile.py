@@ -3,6 +3,8 @@ import os
 from openai import OpenAI
 from datetime import datetime
 import re
+import sys
+sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置主要信息,选择调用前面创建的系统变量
 DEEPSEEK_API_KEY = os.environ.get("XIAO_FU_MEMORY")
@@ -45,7 +47,7 @@ def generate_summary(conversations):
     - important_dates: 重要日期（如果有）
     - personality: 性格特征（从对话中感知）
 
-    请只输出JSON，不要其他解释。
+    请只输出JSON，不要其他解释。尽可能的详细
     必须闭合完整可直接json.loads解析
 
     对话记录：

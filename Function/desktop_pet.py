@@ -20,6 +20,7 @@ bate_dir = os.path.dirname(__file__)
 index_file = os.path.join(bate_dir, "index.html")
 
 
+
 # 通信桥接
 # 这里需要使用pyqt5的信号方式，子线程无法直接调用主线程的函数，所以需要要信号来传递数据，主线程接收到信号之后刷新ui
 class Bridge(QObject):
@@ -44,6 +45,7 @@ class Bridge(QObject):
             # print(len(reply))
             self.reply_signal.emit(reply)
 
+
         # 启动子线程
         threading.Thread(target=call, daemon=True).start()
 
@@ -53,8 +55,19 @@ class DesktopPet(QMainWindow):
         super().__init__()
         # 设置窗口样式
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool )
+        # self.setWindowFlags(Qt.WindowTransparentForInput)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setGeometry(100, 100, 500, 600)
+        
+        # 小芙的位置
+        desktop = self.screen().availableGeometry()
+        window_w = self.window().width()
+        window_h = self.window().height()
+
+        x = desktop.width() - window_w + 100
+        y = desktop.height() - window_h - 20
+        self.move(x , y)
+
 
         # 创建网络组件
         self.webview = QWebEngineView(self)
@@ -75,10 +88,12 @@ class DesktopPet(QMainWindow):
         self.webview.show()
 
         # 实现窗口拖拽
+        
         self.drag_pos = None
         self.webview.mousePressEvent = self.mousePressEvent
         self.webview.mouseMoveEvent = self.mouseMoveEvent
         self.webview.mouseReleaseEvent = self.mouseReleaseEvent
+
 
     # 与窗口拖拽有关，但未能整理
     def mousePressEvent(self, event):
