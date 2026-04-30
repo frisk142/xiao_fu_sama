@@ -8,6 +8,7 @@
         /* 页面整体 */
         body {
             margin: 0;
+            padding: 0;
             overflow: hidden;
             background-color: transparent;
         }
@@ -99,7 +100,7 @@
 
     <div id="reply-box">
     </div>
-    <button id  = "reply_switch">❌</button>SSS
+    <button id  = "reply_switch">❌</button>
 
     <!--用于处理关闭对话框的判断逻辑-->
     <script>
@@ -111,7 +112,7 @@
         closeBtn.addEventListener("click", function() {
             const isHidden = replyBox.style.display === "none";
             replyBox.style.display = isHidden ? "block" : "none";
-            closeBtn.textContent = isHidden ? "💬" : "❌";
+            closeBtn.textContent = isHidden ? "❌" : "💬";
     }
   );
 }

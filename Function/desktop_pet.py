@@ -54,7 +54,7 @@ class DesktopPet(QMainWindow):
     def __init__(self):
         super().__init__()
         # 设置窗口样式
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool )
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool) #  | Qt.WindowTransparentForInput（鼠标穿透） 
         # self.setWindowFlags(Qt.WindowTransparentForInput)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setGeometry(100, 100, 500, 600)
@@ -87,8 +87,10 @@ class DesktopPet(QMainWindow):
         self.webview.load(QUrl.fromLocalFile(index_file))
         self.webview.show()
 
+        # 窗口大小
+        self.setFixedSize(400,600)
+
         # 实现窗口拖拽
-        
         self.drag_pos = None
         self.webview.mousePressEvent = self.mousePressEvent
         self.webview.mouseMoveEvent = self.mouseMoveEvent
