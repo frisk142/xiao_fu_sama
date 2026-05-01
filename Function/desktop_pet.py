@@ -33,7 +33,7 @@ class Bridge(QObject):
     def show_reply(self, reply):
         safe_reply = json.dumps(reply)
         self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}') # 理论上来说应该能跑的，但是不应该啊
-        print(reply)
+        print(reply) 
 
     @pyqtSlot(str)
     def sendToPython(self, text):
@@ -54,7 +54,7 @@ class DesktopPet(QMainWindow):
     def __init__(self):
         super().__init__()
         # 设置窗口样式
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool) #  | Qt.WindowTransparentForInput（鼠标穿透） 
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool ) #  | Qt.WindowTransparentForInput（鼠标穿透） 
         # self.setWindowFlags(Qt.WindowTransparentForInput)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setGeometry(100, 100, 500, 600)

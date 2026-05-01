@@ -11,10 +11,12 @@
             padding: 0;
             overflow: hidden;
             background-color: transparent;
+            pointer-events: none; /* 实现窗口整体穿透，确保空白区域可以整体穿透，再给每个元素组件设置单独的 pointer-events 来实现部分交互 */
         }
 
         /* 自定义输入框区域 */
         .input-area {
+            pointer-events: auto;
             position: fixed;
             bottom: 5px;
             left: 20px;
@@ -28,6 +30,7 @@
 
         /* 输入框 */
         #input-text {
+            pointer-events: auto;
             width: 180px;
             padding: 5px 12px;
             border-radius: 20px;
@@ -38,6 +41,7 @@
 
         /* 发送按钮 */
         #send-btn {
+            pointer-events: auto;
             background: #ff8da1;
             border: none;
             border-radius: 20px;
@@ -48,6 +52,7 @@
 
         /* 小芙回答框 */
         #reply-box {
+        pointer-events: auto;
         display: block;
         background: rgba(255,248,205,0.8);
         width: 320px;
@@ -67,6 +72,7 @@
     }
         /* reply-box开关 */
         #reply_switch{
+            pointer-events: auto;
             background: rgba(0,0,0,0);
             position: absolute;
             top: 210px;
