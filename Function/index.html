@@ -5,6 +5,12 @@
     <title>小芙酱</title>
     <style>
 
+        *,*::before,*::after {  /* 全局重置 */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         /* 页面整体 */
         body {
             margin: 0;
@@ -18,7 +24,7 @@
         .input-area {
             pointer-events: auto;
             position: fixed;
-            bottom: 5px;
+            top: 380px;
             left: 20px;
             background: rgba(0,0,0,0.6);
             border-radius: 30px;
@@ -31,6 +37,7 @@
         /* 输入框 */
         #input-text {
             pointer-events: auto;
+            top: 100px;
             width: 180px;
             padding: 5px 12px;
             border-radius: 20px;
@@ -42,6 +49,7 @@
         /* 发送按钮 */
         #send-btn {
             pointer-events: auto;
+            top: 100px;
             background: #ff8da1;
             border: none;
             border-radius: 20px;
@@ -52,36 +60,53 @@
 
         /* 小芙回答框 */
         #reply-box {
-        pointer-events: auto;
-        display: block;
-        background: rgba(255,248,205,0.8);
-        width: 320px;
-        height: 150px;
-        border: none;
-        outline: none;
-        font-size: 15px;
-        border-radius: 15px;
-        padding: 10px;
-        word-wrap: break-word;
-        position: fixed;
-        top: 210px;
-        overflow-y: auto;
-        word-wrap: break-word;
-        scrollbar-width: none; 
-        -ms-overflow-style: none;
+            pointer-events: auto;
+            display: block;
+            background: rgba(255,248,205,0.8);
+            width: 320px;
+            height: 150px;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            border-radius: 15px;
+            padding: 10px;
+            word-wrap: break-word;
+            position: fixed;
+            top: 0px;
+            overflow-y: auto;
+            word-wrap: break-word;
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
     }
+
         /* reply-box开关 */
         #reply_switch{
             pointer-events: auto;
             background: rgba(0,0,0,0);
             position: absolute;
-            top: 210px;
+            top: 0px;
             font-size: 16px;
             z-index: 1000;
             width: 23px;
             height: 23px;
-            right: 170px;
+            right: 180px;
             border: none;
+        }
+
+        #waifu,.waifu{
+            position: fixed;
+            top: 90px;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            z-index: 0;
+        }
+        canvas{
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
         }
     
         /*隐藏滚动条*/
@@ -92,7 +117,7 @@
         /* 隐藏看板娘自带的整个对话框容器 */
         #waifu-tips {
             display: none !important;
-            }
+        }
 
     </style>
 
