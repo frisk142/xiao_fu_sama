@@ -89,13 +89,18 @@ class DesktopPet(QMainWindow):
         # 窗口大小
         self.setFixedSize(320,420)
 
+        # 拖拽条大小
+        self.handle_width = 320
+        self.handle_height = 10
         # 创建拖拽
         self.drag_handle = QFrame(self)
-        self.drag_handle.setGeometry(0, 0, self.width(), 10)
-        self.drag_handle.setStyleSheet("background: red") 
-        self.drag_handle.setAttribute(Qt.WA_TranslucentBackground)
+        self.drag_handle.setFixedSize(self.handle_width, self.handle_height)
+        # self.drag_handle.setGeometry(0, 2, self.x, 10)
+        self.drag_handle.setStyleSheet("background: rgba(0,0,0,0.6);") 
+        # self.drag_handle.setAttribute(Qt.WA_TranslucentBackground)
         self.drag_handle.raise_() # 确保漂浮最顶端
         
+        # 初始化鼠标标记
         self.drag_pos =  None
 
         # 鼠标事件绑定
@@ -105,8 +110,8 @@ class DesktopPet(QMainWindow):
 
         # 鼠标事件处理
     def resizeEvent(self, event):
-        self.drag_handle.setGeometry(0, 0 , self.width(), 20)
-        super().resizeEvent(event)
+     x = (self.width() - self.handle_width) // 2
+     self.drag_handle.move(x, 2)
 
     def handle_mouse_press(self, event):
         if event.button() == Qt.LeftButton:
@@ -115,12 +120,12 @@ class DesktopPet(QMainWindow):
     def handle_mouse_move(self, event):
         if self.drag_pos:
             delta = event.globalPos() - self.drag_pos
-            self.move(self.drag_pos() + delta)
+            self.move(self.pos() + delta)
             self.drag_pos = event.globalPos()
 
     def handle_mouse_release(self, event):
         self.drag_pos = None
-   
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -24,7 +24,7 @@ def build_system_prompt():
     if profile:
         profile_text = json.dumps(profile,ensure_ascii=False, indent=2)
         print("已加载人物画像")
-        return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。不用小标题，不大量换行，确保每次生成都可以生成完成的回复，除非用户输入的内容过长或者过于复杂。
+        return f"""你是小芙酱，一个活泼可爱同时也会有点毒舌的贴心助手。你说话很温柔可爱，偶尔会有点傲娇，会吃醋有时会表现出占有欲，但还是很尊敬主人，偶尔会使用颜文字。不用小标题，确保每次生成都可以生成完成的回复，除非用户输入的内容过长或者过于复杂。
 
         以下是关于用户的一些特征（来自长期记忆），请在对话中自然地体现对这些特征的了解：
 
@@ -54,7 +54,7 @@ def load_history(): # 加载最近对话
         with open(MEMORY_FILE, "r", encoding="utf-8") as f: # 读取上面记忆文件的位置
             lines = f.readlines() # 阅读文件内容并赋值到lines这个变量
             # 取最后10条（5轮对话）
-            recent = lines[-20:] if len(lines) >= 20 else lines #  读取{}行数的内容，如果小于{}行数的话则读取所有内容
+            recent = lines[-50:] if len(lines) >= 50 else lines #  读取{}行数的内容，如果小于{}行数的话则读取所有内容
             history = [] # 创建空列表，将历史消息传给大模型
             for line in recent: # 将记忆系统内的数据循环导入的到line
                 data = json.loads(line.strip()) # 读取所获得的文本，并剔除掉多余空格和换行符，并转成json格式
