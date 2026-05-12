@@ -7,10 +7,10 @@ import os
 import sys
 import threading
 from PyQt5.QtCore import QUrl, QObject, pyqtSlot, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
 import json
@@ -32,7 +32,7 @@ class Bridge(QObject):
         
     def show_reply(self, reply):
         safe_reply = json.dumps(reply)
-        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}') # 理论上来说应该能跑的，但是不应该啊
+        self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}')
         print(reply) 
 
     @pyqtSlot(str)
@@ -89,23 +89,38 @@ class DesktopPet(QMainWindow):
         # 窗口大小
         self.setFixedSize(320,420)
 
-        # 实现窗口拖拽
-        self.drag_pos = None
-        self.webview.mousePressEvent = self.mousePressEvent
-        self.webview.mouseMoveEvent = self.mouseMoveEvent
-        self.webview.mouseReleaseEvent = self.mouseReleaseEvent
+        # 创建拖拽
+        self.drag_handle = QFrame(self)
+        self.drag_handle.setGeometry(0, 0, self.width(), 10)
+        self.drag_handle.setStyleSheet("background: red") 
+        self.drag_handle.setAttribute(Qt.WA_TranslucentBackground)
+        self.drag_handle.raise_() # 确保漂浮最顶端
+        
+        self.drag_pos =  None
 
+        # 鼠标事件绑定
+        self.drag_handle.mousePressEvent = self.handle_mouse_press
+        self.drag_handle.mouseMoveEvent = self.handle_mouse_move
+        self.drag_handle.mouseReleaseEvent = self.handle_mouse_release
 
-    # 与窗口拖拽有关，但未能整理
-    def mousePressEvent(self, event):
-        self.drag_pos = event.globalPos()
-    def mouseMoveEvent(self, event):
+        # 鼠标事件处理
+    def resizeEvent(self, event):
+        self.drag_handle.setGeometry(0, 0 , self.width(), 20)
+        super().resizeEvent(event)
+
+    def handle_mouse_press(self, event):
+        if event.button() == Qt.LeftButton:
+            self.drag_pos = event.globalPos()
+
+    def handle_mouse_move(self, event):
         if self.drag_pos:
             delta = event.globalPos() - self.drag_pos
-            self.move(self.pos() + delta)
+            self.move(self.drag_pos() + delta)
             self.drag_pos = event.globalPos()
-    def mouseReleaseEvent(self, event):
+
+    def handle_mouse_release(self, event):
         self.drag_pos = None
+   
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
