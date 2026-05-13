@@ -13,6 +13,7 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
+from xiao_fu_sama import KEY_FILE
 import json
 
 
@@ -35,19 +36,47 @@ class Bridge(QObject):
         self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}')
         print(reply) 
 
+    # 保存api密钥
+    def save_api_key(self, key):
+        with open(KEY_FILE, "w" , encoding= "utf-8") as f:
+            json.dump({"ds_api_key" : key}, f)
+            return "API 密钥已保存！小芙现在可以正常对话了"
+
+    # 加载api密钥    
+    def load_api_key(self):
+        try:
+            with open(KEY_FILE, "r", encoding = "utf-8") as f:
+                api_data = json.load(f)
+                return api_data.get("api_key")
+        except:
+            return None
+
     @pyqtSlot(str)
     def sendToPython(self, text):
+        # 绑定api密钥命令
+        if text.startswith("@bind"):
+            key = text.replace("@bind", "").strip()
+            if key:
+                msg = self.save_api_key(key)
+                self.view.page().runJavaScript(f"displayReply('{msg}', 3000)")
+                return
+            
+        api_key = self.load_api_key()
+        if not api_key:
+            self.view.page().runJavaScript('displayReplay("请先绑定API密钥，格式：@bind YOUR_API_KEY", 3000)')
+            return
+
+        # 聊天调用部分    
         print(f"[用户] {text}")
 
         def call():
             reply = chat_with_fu_jiang(text)
-            # print(f"小芙酱：{reply}")
-            # print(len(reply))
             self.reply_signal.emit(reply)
 
 
         # 启动子线程
         threading.Thread(target=call, daemon=True).start()
+    
 
 # 定义桌宠窗口类 继承主窗口
 class DesktopPet(QMainWindow):
@@ -92,11 +121,12 @@ class DesktopPet(QMainWindow):
         # 拖拽条大小
         self.handle_width = 320
         self.handle_height = 10
+
         # 创建拖拽
         self.drag_handle = QFrame(self)
         self.drag_handle.setFixedSize(self.handle_width, self.handle_height)
         # self.drag_handle.setGeometry(0, 2, self.x, 10)
-        self.drag_handle.setStyleSheet("background: rgba(0,0,0,0.6);") 
+        self.drag_handle.setStyleSheet("background: rgba(0,0,0,0.6); border-radius: 5px;") 
         # self.drag_handle.setAttribute(Qt.WA_TranslucentBackground)
         self.drag_handle.raise_() # 确保漂浮最顶端
         
@@ -108,11 +138,18 @@ class DesktopPet(QMainWindow):
         self.drag_handle.mouseMoveEvent = self.handle_mouse_move
         self.drag_handle.mouseReleaseEvent = self.handle_mouse_release
 
-        # 鼠标事件处理
+    # 拖拽条样式
     def resizeEvent(self, event):
-     x = (self.width() - self.handle_width) // 2
+     margin = 40
+     new_width = self.width() - 2 * margin
+     if new_width < self.handle_width:
+         new_width = 50
+     self.drag_handle.setFixedWidth(new_width)
+     x = (self.width() - new_width) // 2
      self.drag_handle.move(x, 2)
-
+     super().resizeEvent(event)
+     
+    # 鼠标事件处理
     def handle_mouse_press(self, event):
         if event.button() == Qt.LeftButton:
             self.drag_pos = event.globalPos()

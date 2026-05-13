@@ -6,7 +6,8 @@ import sys
 sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置需要的文件
-DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+# DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
+KEY_FILE = os.path.join(os.path.dirname(__file__), "api_key.json")
 
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 
@@ -36,7 +37,7 @@ def build_system_prompt():
 
 
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
-client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url=BASE_URL)
+client = OpenAI(api_key=KEY_FILE,base_url=BASE_URL)
 
 def save_conversation(user_msg, bot_msg): # 保存对话
     entry = {
