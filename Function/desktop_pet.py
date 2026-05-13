@@ -6,6 +6,7 @@ sys.stdout.reconfigure(encoding = "utf-8")
 import os
 import sys
 import threading
+import json
 from PyQt5.QtCore import QUrl, QObject, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -14,11 +15,10 @@ from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
 from xiao_fu_sama import KEY_FILE
-import json
+from config.paths import INDEX_FILE
 
 
-bate_dir = os.path.dirname(__file__)
-index_file = os.path.join(bate_dir, "index.html")
+
 
 
 
@@ -47,8 +47,10 @@ class Bridge(QObject):
         try:
             with open(KEY_FILE, "r", encoding = "utf-8") as f:
                 api_data = json.load(f)
+                print(api_data)
                 return api_data.get("api_key")
         except:
+            print("未找到api文件")
             return None
 
     @pyqtSlot(str)
@@ -58,12 +60,13 @@ class Bridge(QObject):
             key = text.replace("@bind", "").strip()
             if key:
                 msg = self.save_api_key(key)
-                self.view.page().runJavaScript(f"displayReply('{msg}', 3000)")
+                print(msg)
+                self.view.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}", 3000)')
                 return
             
         api_key = self.load_api_key()
         if not api_key:
-            self.view.page().runJavaScript('displayReplay("请先绑定API密钥，格式：@bind YOUR_API_KEY", 3000)')
+            self.view.page().runJavaScript('document.getElementById("reply-box").innerText = "请先绑定API密钥，格式：@bind YOUR_API_KEY。如没有api密钥，请前往https://www.deepseek.com/中获取", 3000)')
             return
 
         # 聊天调用部分    
@@ -72,6 +75,7 @@ class Bridge(QObject):
         def call():
             reply = chat_with_fu_jiang(text)
             self.reply_signal.emit(reply)
+            print(reply)
 
 
         # 启动子线程
@@ -112,7 +116,7 @@ class DesktopPet(QMainWindow):
         self.webview.page().setWebChannel(self.channel) # 绑定通信通道至网页
 
         # 加载 HTML
-        self.webview.load(QUrl.fromLocalFile(index_file))
+        self.webview.load(QUrl.fromLocalFile(INDEX_FILE))
         self.webview.show()
 
         # 窗口大小

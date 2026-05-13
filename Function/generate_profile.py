@@ -5,21 +5,17 @@ from datetime import datetime
 import re
 import sys
 sys.stdout.reconfigure(encoding = "utf-8")
+from config.paths import KEY_FILE, MEMORY_FILE, PROMPT_FILE
 
 # 配置主要信息,选择调用前面创建的系统变量
-DEEPSEEK_API_KEY = os.environ.get("XIAO_FU_MEMORY")
+
 
 BASE_URL = "https://api.deepseek.com/v1"
 
 # 文件路径
-BASE_DIR = os.path.dirname(os.path.dirname(__file__)) # 定位至根目录
 
-MEMORY_FILE = os.path.join(BASE_DIR, "xiao_fu_memory" ,"xiao_fu_memory.json") # 记忆文件位置
 
-PROMPT_FILE = os.path.join(BASE_DIR, "prompt" , "prompt.json") # 配置文件保存
-print(PROMPT_FILE)
-
-client = OpenAI(api_key=DEEPSEEK_API_KEY,base_url=BASE_URL)
+client = OpenAI(api_key=KEY_FILE,base_url=BASE_URL)
 
 def load_all_conversations(): # 读取对话记录
     with open(MEMORY_FILE , encoding="UTF-8") as f:

@@ -1,24 +1,17 @@
 import json
 import os
+import sys
 from openai import OpenAI
 from datetime import datetime
-import sys
+from config.paths import KEY_FILE, MEMORY_FILE, PROMPT_FILE, COUNT_FILE
+
+
 sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置需要的文件
 # DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
-KEY_FILE = os.path.join(os.path.dirname(__file__), "api_key.json")
 
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
-
-# 计数器位置
-COUNT_file = os.path.join(os.path.dirname(__file__),"COUNT_file")
-
-# 记忆文件路径
-MEMORY_FILE = os.path.join(os.path.dirname(__file__),"xiao_fu_memory", "xiao_fu_memory.json")
-
-# 人物画像位置
-PROMPT_FILE = os.path.join(os.path.dirname(__file__),"prompt", "prompt.json")
 
 def build_system_prompt():
     profile = load_profile()
@@ -67,8 +60,8 @@ def load_history(): # 加载最近对话
 
 def get_count(): # 创建计数器文件
     try:
-        with open(COUNT_file , "r" , encoding="utf-8") as f:
-            print(COUNT_file)
+        with open(COUNT_FILE , "r" , encoding="utf-8") as f:
+            print(COUNT_FILE)
             data = json.load(f)
             return data.get("rounds",0)
     except FileNotFoundError:
@@ -76,8 +69,8 @@ def get_count(): # 创建计数器文件
 
 def set_count(count):
     try:
-        with open(COUNT_file , "w" , encoding="utf-8") as f:
-            print(COUNT_file)
+        with open(COUNT_FILE , "w" , encoding="utf-8") as f:
+            print(COUNT_FILE)
             json.dump({"rounds": count}, f)
     except FileNotFoundError:
         print("未能成功添加")
