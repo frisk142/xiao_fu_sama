@@ -19,9 +19,6 @@ from config.paths import INDEX_FILE
 
 
 
-
-
-
 # 通信桥接
 # 这里需要使用pyqt5的信号方式，子线程无法直接调用主线程的函数，所以需要要信号来传递数据，主线程接收到信号之后刷新ui
 class Bridge(QObject):
