@@ -14,8 +14,8 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
-from xiao_fu_sama import KEY_FILE
 from config.paths import INDEX_FILE
+from config.api_key_manager import save_api_key, load_api_key
 
 
 
@@ -31,24 +31,7 @@ class Bridge(QObject):
     def show_reply(self, reply):
         safe_reply = json.dumps(reply)
         self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {safe_reply}')
-        print(reply) 
-
-    # 保存api密钥
-    def save_api_key(self, key):
-        with open(KEY_FILE, "w" , encoding= "utf-8") as f:
-            json.dump({"ds_api_key" : key}, f)
-            return "API 密钥已保存！小芙现在可以正常对话了"
-
-    # 加载api密钥    
-    def load_api_key(self):
-        try:
-            with open(KEY_FILE, "r", encoding = "utf-8") as f:
-                api_data = json.load(f)
-                print(api_data)
-                return api_data.get("api_key")
-        except:
-            print("未找到api文件")
-            return None
+        print(reply)
 
     @pyqtSlot(str)
     def sendToPython(self, text):
