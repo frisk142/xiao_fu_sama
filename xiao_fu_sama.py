@@ -10,7 +10,7 @@ sys.stdout.reconfigure(encoding = "utf-8")
 # 配置需要的文件
 # DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
-api_key = "sk-b417442a1e93452fba6b353e3a35474f"
+api_key = load_api_key()
 
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
 

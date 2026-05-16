@@ -2,8 +2,7 @@ COUNT_file
 xiao_fu_memory/
 prompt/
 api_key
-.gitignore
 __pycache__/
 .idea/
 .vscode/
-.api_key/
+api_key
