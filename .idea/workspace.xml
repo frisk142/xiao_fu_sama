@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e83a2d7-ddda-4793-9234-3694b45ec026" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/COUNT_file" beforeDir="false" afterPath="$PROJECT_DIR$/COUNT_file" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Function/desktop_pet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Function/desktop_pet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xiao_fu_memory/xiao_fu_memory.json" beforeDir="false" afterPath="$PROJECT_DIR$/xiao_fu_memory/xiao_fu_memory.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xiao_fu_sama.py" beforeDir="false" afterPath="$PROJECT_DIR$/xiao_fu_sama.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api_key.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/api_key_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/api_key_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,14 +26,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.desktop_pet.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

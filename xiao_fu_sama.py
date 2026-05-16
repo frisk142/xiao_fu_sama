@@ -3,15 +3,17 @@ import os
 import sys
 from openai import OpenAI
 from datetime import datetime
-from config.paths import KEY_FILE, MEMORY_FILE, PROMPT_FILE, COUNT_FILE
-
-
+from config.paths import  MEMORY_FILE, PROMPT_FILE, COUNT_FILE
+from config.api_key_manager import load_api_key, save_api_key
 sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置需要的文件
 # DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 
+api_key = "sk-b417442a1e93452fba6b353e3a35474f"
+
 BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
+
 
 def build_system_prompt():
     profile = load_profile()
@@ -30,7 +32,7 @@ def build_system_prompt():
 
 
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
-client = OpenAI(api_key=KEY_FILE,base_url=BASE_URL)
+client = OpenAI(api_key=api_key,base_url=BASE_URL)
 
 def save_conversation(user_msg, bot_msg): # 保存对话
     entry = {

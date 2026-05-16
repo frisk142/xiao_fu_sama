@@ -14,9 +14,8 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
-from config.paths import INDEX_FILE
+from config.paths import INDEX_FILE, KEY_FILE
 from config.api_key_manager import save_api_key, load_api_key
-
 
 
 # 通信桥接
@@ -39,14 +38,15 @@ class Bridge(QObject):
         if text.startswith("@bind"):
             key = text.replace("@bind", "").strip()
             if key:
-                msg = self.save_api_key(key)
+                msg = save_api_key(key)
                 print(msg)
-                self.view.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}", 3000)')
+                self.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}")')
                 return
             
-        api_key = self.load_api_key()
+        api_key = load_api_key()
+        print(f"当前API密钥: {api_key}")
         if not api_key:
-            self.view.page().runJavaScript('document.getElementById("reply-box").innerText = "请先绑定API密钥，格式：@bind YOUR_API_KEY。如没有api密钥，请前往https://www.deepseek.com/中获取", 3000)')
+            self.page.runJavaScript('document.getElementById("reply-box").innerText = "请先绑定API密钥，格式：@bind YOUR_API_KEY。如没有api密钥，请前往https://www.deepseek.com/中获取", 3000)')
             return
 
         # 聊天调用部分    
