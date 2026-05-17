@@ -32,7 +32,6 @@ def build_system_prompt():
 
 
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
-client = OpenAI(api_key=api_key,base_url=BASE_URL)
 
 def save_conversation(user_msg, bot_msg): # 保存对话
     entry = {
@@ -86,6 +85,13 @@ def load_profile():  # 加载人物画像函数
 
 # 对话函数
 def chat_with_fu_jiang(user_input):
+
+    api_key = load_api_key()
+    if not api_key:
+        return "请先使用 @bind 命令绑定你的API_KEY "
+
+    client = OpenAI(api_key=api_key,base_url=BASE_URL)
+
     # 加载最近历史
     history = load_history() # 获取历史对话函数所获得的对话
     load_Characterfile = load_profile()
