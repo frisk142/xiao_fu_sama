@@ -3,7 +3,7 @@ xiao_fu_memory/
 prompt/
 api_key
 __pycache__/
-.idea/
-.vscode/
+idea/
+vscode/
 api_key.json
-.prompt/
+prompt/
