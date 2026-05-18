@@ -40,12 +40,13 @@ class Bridge(QObject):
             if key:
                 msg = save_api_key(key)
                 print(msg)
-                self.page().runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}")')
+                self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}")')
                 return
             
         api_key = load_api_key()
         print(f"当前API密钥: {api_key}")
         if not api_key:
+            print("没有检测到api文件  not have api FILE")
             self.page.runJavaScript('document.getElementById("reply-box").innerText = "请先绑定API密钥，格式：@bind YOUR_API_KEY。如没有api密钥，请前往https://www.deepseek.com/中获取", 3000)')
             return
 
@@ -109,9 +110,7 @@ class DesktopPet(QMainWindow):
         # 创建拖拽
         self.drag_handle = QFrame(self)
         self.drag_handle.setFixedSize(self.handle_width, self.handle_height)
-        # self.drag_handle.setGeometry(0, 2, self.x, 10)
         self.drag_handle.setStyleSheet("background: rgba(0,0,0,0.6); border-radius: 5px;") 
-        # self.drag_handle.setAttribute(Qt.WA_TranslucentBackground)
         self.drag_handle.raise_() # 确保漂浮最顶端
         
         # 初始化鼠标标记
