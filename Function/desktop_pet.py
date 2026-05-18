@@ -40,8 +40,8 @@ class Bridge(QObject):
             if key:
                 save_api_key(key)
                 reply_save_key = "api密钥绑定成功，现在小芙可以正常聊天了\n如果需要更换密钥，请再次使用@bind命令绑定新的密钥.\n快开始你们的第一次聊天吧！"
-                json.reply_save_key = json.dumps(reply_save_key)
-                self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {json.reply_save_key}')
+                json_reply_save_key = json.dumps(reply_save_key)
+                self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {json_reply_save_key}')
                 return
             
         api_key = load_api_key()
