@@ -38,16 +38,19 @@ class Bridge(QObject):
         if text.startswith("@bind"):
             key = text.replace("@bind", "").strip()
             if key:
-                msg = save_api_key(key)
-                print(msg)
-                self.page.runJavaScript(f'document.getElementById("reply-box").innerText = "{msg}")')
+                save_api_key(key)
+                reply_save_key = "api密钥绑定成功，现在小芙可以正常聊天了\n如果需要更换密钥，请再次使用@bind命令绑定新的密钥.\n快开始你们的第一次聊天吧！"
+                json.reply_save_key = json.dumps(reply_save_key)
+                self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {json.reply_save_key}')
                 return
             
         api_key = load_api_key()
         print(f"当前API密钥: {api_key}")
         if not api_key:
             print("没有检测到api文件  not have api FILE")
-            self.page.runJavaScript('document.getElementById("reply-box").innerText = "请先绑定API密钥，格式：@bind YOUR_API_KEY。如没有api密钥，请前往https://www.deepseek.com/中获取", 3000)')
+            api_key_point = "请先绑定API密钥，格式：\n@bind YOUR_API_KEY\n如没有api密钥，请前往https://www.deepseek.com/中获取"
+            json_api_key_point = json.dumps(api_key_point)
+            self.page.runJavaScript(f'document.getElementById("reply-box").innerText = {json_api_key_point}')
             return
 
         # 聊天调用部分    
