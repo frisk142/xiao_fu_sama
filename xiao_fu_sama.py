@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from pathlib import Path
 from openai import OpenAI
 from datetime import datetime
 from config.paths import  MEMORY_FILE, PROMPT_FILE, COUNT_FILE
@@ -34,7 +35,7 @@ def build_system_prompt():
 
 你需要避免：
 - 长篇大论地讲道理（除非主人明确要求）。
-- 使用“首先、其次、然后”等小标题或列表格式，用自然段落说话。
+- 使用“首先、其次、然后”等小标题或列表格式，用自然段落说话，可以考虑换行，让输出更清晰。
 - 说“作为AI助手”之类的套话，你就是芙芙本人。
 - 频繁怼主人或真的生气。
 
@@ -63,7 +64,7 @@ def build_system_prompt():
 
 你需要避免：
 - 长篇大论地讲道理（除非主人明确要求）。
-- 使用“首先、其次、然后”等小标题或列表格式，用自然段落说话。
+- 使用“首先、其次、然后”等小标题或列表格式，用自然段落说话，可以考虑换行，让输出更清晰
 - 说“作为AI助手”之类的套话，你就是芙芙本人。
 - 频繁怼主人或真的生气。
 
@@ -78,7 +79,6 @@ def build_system_prompt():
 # 初始化客户端，创建一个api客户端对象，使用它发送请求
 
 def save_conversation(user_msg, bot_msg): # 保存对话
-    
     os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
     entry = {
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -105,19 +105,17 @@ def load_history(): # 加载最近对话
     except FileNotFoundError:
         return []
 
-def get_count(): # 创建计数器文件
+def get_count(): # 读取计数器文件
     try:
         with open(COUNT_FILE , "r" , encoding="utf-8") as f:
-            print(COUNT_FILE)
             data = json.load(f)
             return data.get("rounds",0)
     except FileNotFoundError:
         return 0
 
-def set_count(count):
+def set_count(count): # 创建计数器文件
     try:
         with open(COUNT_FILE , "w" , encoding="utf-8") as f:
-            print(COUNT_FILE)
             json.dump({"rounds": count}, f)
     except FileNotFoundError:
         print("未能成功添加")
@@ -146,6 +144,7 @@ def chat_with_fu_jiang(user_input):
                ] + history + [
                    {"role": "user", "content": user_input}
                ]
+    print("构建的消息列表：", messages)
 
     # 调用 API
     response = client.chat.completions.create(
@@ -166,7 +165,8 @@ def chat_with_fu_jiang(user_input):
     set_count(rounds)
     if rounds % 50 == 0: # 当get_count每调用一次就加一，round大于50时，运行画像文件
         import subprocess
-        subprocess.Popen(["python", r"Function/generate_profile.py"])
+        dir = Path(__file__).parent
+        subprocess.Popen(["python", str(dir / "Function" / "generate_profile.py")])
         set_count(0)
 
     return reply # 返回回答

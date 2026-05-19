@@ -5,9 +5,11 @@ import sys
 from openai import OpenAI
 from datetime import datetime
 from pathlib import Path
-from config.paths import KEY_FILE, MEMORY_FILE, PROMPT_FILE
-sys.stdout.reconfigure(encoding = "utf-8")
 sys.path.append(str(Path(__file__).parent.parent))
+from config.paths import  MEMORY_FILE, PROMPT_FILE
+from config.api_key_manager import load_api_key
+sys.stdout.reconfigure(encoding = "utf-8")
+
 
 
 # 配置主要信息,选择调用前面创建的系统变量
@@ -17,21 +19,30 @@ BASE_URL = "https://api.deepseek.com/v1"
 
 # 文件路径
 
+api_key = load_api_key()
+print(api_key)
 
-client = OpenAI(api_key=KEY_FILE,base_url=BASE_URL)
+client = OpenAI(api_key=api_key,base_url=BASE_URL)
 
-def ensure_profile():
+def init_file():
     os.makedirs(os.path.dirname(PROMPT_FILE), exist_ok=True)
     if not os.path.exists(PROMPT_FILE):
         with open(PROMPT_FILE , "w" , encoding="utf-8") as f:
+            json.dump({}, f)
+
+
+    os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
+    if not os.path.exists(MEMORY_FILE):
+        with open(MEMORY_FILE , "w" , encoding="utf-8") as f:
             pass
 
 
+
 def load_all_conversations(): # 读取对话记录
+    os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
     with open(MEMORY_FILE , encoding="UTF-8") as f:
-        lines = f.readlines()
-        conversations = [json.loads(line.strip()) for line in lines]
-        return conversations
+        return  [json.loads(line.strip()) for line in f]
+    
 def generate_summary(conversations):
     if not conversations :
         return {}
@@ -110,7 +121,7 @@ def update_profile(new_profile):
 
 
 if __name__ == "__main__":
-    ensure_profile()
+    init_file()
     print(f"[{datetime.now()}]开始生成用户画像")
     convs = load_all_conversations()
     if not(convs):

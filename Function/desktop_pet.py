@@ -45,7 +45,7 @@ class Bridge(QObject):
                 return
             
         api_key = load_api_key()
-        print(f"当前API密钥: {api_key}")
+
         if not api_key:
             print("没有检测到api文件  not have api FILE")
             api_key_point = "请先绑定API密钥，格式：\n@bind YOUR_API_KEY\n如没有api密钥，请前往https://www.deepseek.com/中获取"
@@ -59,7 +59,6 @@ class Bridge(QObject):
         def call():
             reply = chat_with_fu_jiang(text)
             self.reply_signal.emit(reply)
-            print(reply)
 
 
         # 启动子线程
