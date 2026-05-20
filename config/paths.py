@@ -1,19 +1,16 @@
+import sys
 import os
+from pathlib import Path
 
-data_dir = os.path.dirname(os.path.dirname(__file__))
-
-KEY_FILE = os.path.join(data_dir, "config","api_key.json")
-
-COUNT_FILE = os.path.join(data_dir, "config", "COUNT_file")
-
-PROMPT_FILE = os.path.join(data_dir, "prompt", "prompt.json")
-
-MEMORY_FILE = os.path.join(data_dir, "xiao_fu_memory", "xiao_fu_memory.json")
-
-INDEX_FILE = os.path.join(data_dir, "Function", "index.html")
-
-DESKTOP_PET_FILE = os.path.join(data_dir, "Function", "desktop_pet.py")
+if getattr(sys, 'frozen', False):
+    base_dir = Path(sys._MEIPASS)
+else:
+    base_dir = Path(__file__).parent.parent
 
 
-
-
+INDEX_FILE = str(base_dir / "Function" / "index.html")
+PROMPT_FILE = str(base_dir / "prompt" / "prompt.json")
+MEMORY_FILE = str(base_dir / "xiao_fu_memory" / "xiao_fu_memory.json")
+KEY_FILE = str(base_dir / "config" / "api_key.json")
+COUNT_FILE = str(base_dir / "config" / "COUNT_file")
+DESKTOP_PET_FILE = str(base_dir / "Function" / "desktop_pet.py")

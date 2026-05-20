@@ -9,3 +9,7 @@ api_key.json
 prompt/
 .idea/
 *.iml
+dist/
+build/
+*.spec
+__pycache__/

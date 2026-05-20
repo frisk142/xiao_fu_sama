@@ -1,7 +1,6 @@
 import json
 import sys
 from config.paths import KEY_FILE
-sys.stdout.reconfigure(encoding = "utf-8")
 
 print(f"API密钥文件路径: {KEY_FILE}")
 

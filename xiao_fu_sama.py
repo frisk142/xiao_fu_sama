@@ -6,7 +6,6 @@ from openai import OpenAI
 from datetime import datetime
 from config.paths import  MEMORY_FILE, PROMPT_FILE, COUNT_FILE
 from config.api_key_manager import load_api_key, save_api_key
-sys.stdout.reconfigure(encoding = "utf-8")
 
 # 配置需要的文件
 # DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
@@ -152,7 +151,7 @@ def chat_with_fu_jiang(user_input):
         messages=messages, # 导入上面构建的完整对话列表
         temperature=0.7,  # 让它更活泼一点
         max_tokens= 2048, # 最大token为2048（求你了别烧太快）
-        frequency_penalty = 0.2,
+        frequency_penalty = 0.2,    
     )
 
     reply = response.choices[0].message.content # 从返回的相应中提取ai的回答文本

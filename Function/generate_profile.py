@@ -8,7 +8,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from config.paths import  MEMORY_FILE, PROMPT_FILE
 from config.api_key_manager import load_api_key
-sys.stdout.reconfigure(encoding = "utf-8")
+
 
 
 

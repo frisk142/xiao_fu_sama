@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-sys.stdout.reconfigure(encoding = "utf-8")
+
 
 import os
 import sys
