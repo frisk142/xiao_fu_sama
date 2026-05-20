@@ -24,6 +24,7 @@ print(api_key)
 
 client = OpenAI(api_key=api_key,base_url=BASE_URL)
 
+# 初始化文件
 def init_file():
     os.makedirs(os.path.dirname(PROMPT_FILE), exist_ok=True)
     if not os.path.exists(PROMPT_FILE):
@@ -36,13 +37,13 @@ def init_file():
         with open(MEMORY_FILE , "w" , encoding="utf-8") as f:
             pass
 
-
-
-def load_all_conversations(): # 读取对话记录
+# 读取对话记录
+def load_all_conversations(): 
     os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
     with open(MEMORY_FILE , encoding="UTF-8") as f:
         return  [json.loads(line.strip()) for line in f]
     
+# 生成用户画像    
 def generate_summary(conversations):
     if not conversations :
         return {}
@@ -72,7 +73,7 @@ def generate_summary(conversations):
     """
 
     response = client.chat.completions.create(
-        model = "deepseek-chat",
+        model = "deepseek-v4-flash",
         messages = [{"role":"user","content":prompt}],
         timeout = 60,
         max_tokens = 8192,
@@ -91,15 +92,19 @@ def generate_summary(conversations):
         profile = {"error":"解析失败","raw":summer_text}
     return profile
 
+
+# 读取画像并写入
 def update_profile(new_profile):
-    # 加载目前的画像
+    print("DEBUG update_profile: new_profile =", new_profile)
     old_profile = {}
     try:
         with open(PROMPT_FILE , "r" ,encoding="utf-8") as f:
             old_profile = json.load(f)
+            print("DEBUG update_profile : old_profile = ", old_profile)
     except FileNotFoundError:
+        print("无法写入")
         pass
-
+ 
     # 合并新旧画像
     merged = old_profile.copy()
     for key , value in new_profile.items():
@@ -109,10 +114,10 @@ def update_profile(new_profile):
             elif isinstance(merged[key],str) and isinstance(value,str):
                 if value not in merged[key]:
                     merged[key] = merged[key] + "`" + value
-                else:
-                    merged[key] = value
             else:
                 merged[key] = value
+        else:
+            merged[key] = value
 
     with open(PROMPT_FILE , "w" , encoding="utf-8") as f:
         json.dump(merged , f, ensure_ascii = False, indent = 2)
@@ -130,15 +135,3 @@ if __name__ == "__main__":
         profile = generate_summary(convs)
         update_profile(profile)
         print(f"用户画像已保存至{PROMPT_FILE}")
-
-
-
-
-
-
-
-
-
-
-
-
