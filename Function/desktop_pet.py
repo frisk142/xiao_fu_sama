@@ -7,6 +7,7 @@ import os
 import sys
 import threading
 import json
+from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, QObject, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
 from PyQt5.QtWebEngineWidgets import QWebEngineView
@@ -14,8 +15,9 @@ from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtCore import Qt, pyqtSignal, QEvent
 from xiao_fu_sama import chat_with_fu_jiang
 from PyQt5.QtCore import pyqtSignal
-from config.paths import INDEX_FILE, KEY_FILE
+from config.paths import INDEX_FILE, ICON
 from config.api_key_manager import save_api_key, load_api_key
+from utils import resource_path
 
 
 # 通信桥接
@@ -69,8 +71,11 @@ class Bridge(QObject):
 class DesktopPet(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.setWindowIcon(QIcon(resource_path("config/xiaofu_sama.ico")))
+
         # 设置窗口样式
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool ) #  | Qt.WindowTransparentForInput（鼠标穿透） 
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Window) #  | Qt.WindowTransparentForInput（鼠标穿透） 
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setGeometry(100, 100, 500, 600)
         
@@ -151,6 +156,7 @@ class DesktopPet(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setActiveWindow(QIcon(ICON))
     pet = DesktopPet()
     pet.show()
     sys.exit(app.exec_())

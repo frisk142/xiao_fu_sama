@@ -1,15 +1,12 @@
 COUNT_file
 xiao_fu_memory/
 prompt/
-api_key
 __pycache__/
 idea/
 vscode/
 api_key.json
-prompt/
 .idea/
 *.iml
 dist/
 build/
 *.spec
-__pycache__/
