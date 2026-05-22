@@ -30,6 +30,8 @@
 
 通过用户画像来进行长期记忆
 
+用户画像部分展示
+
 ![小芙截图](screenshots/screenshots3.png)
   
 
