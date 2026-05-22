@@ -1,4 +1,6 @@
-**小芙Sama — 你的桌面AI助手**
+## 小芙Sama — 你的桌面AI助手
+
+
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -8,6 +10,7 @@
 
 
 一个基于 DeepSeek API 的桌面AI助手，拥有长期记忆、用户画像、桌面宠物功能。她可以陪你聊天、帮你记录、会随时间成长为你更贴心的伙伴。
+
 
 ## 截图展示
 
@@ -26,6 +29,7 @@
 🌐   **WebView前端**   — 使用 HTML/CSS/JS 构建聊天界面，易于自定义。
 
 
+
 ## 🧠 长期记忆功能
 
 通过用户画像来进行长期记忆
@@ -33,8 +37,9 @@
 用户画像部分展示
 
 ![小芙截图](screenshots/screenshots3.png)
-  
 
+
+  
 ## 指令
 
 ```
@@ -61,6 +66,8 @@
 
 
 ![小芙截图](screenshots/screenshots2.png)
+
+
 
 ## 🙏 致谢 (Acknowledgements)
 
