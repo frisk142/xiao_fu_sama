@@ -12,7 +12,7 @@ from config.api_key_manager import load_api_key, save_api_key
 
 api_key = load_api_key()
 
-BASE_URL = "https://api.deepseek.com/v1" # 配置所需要的链接的服务器
+BASE_URL = "https://api.deepseek.com/v1"
 
 
 def build_system_prompt():
@@ -83,24 +83,23 @@ def save_conversation(user_msg, bot_msg): # 保存对话
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "user": user_msg,
         "bot": bot_msg
-    }  # 按照固格式创建ai与用户的对话
+    }
     with open(MEMORY_FILE, "a", encoding="utf-8") as f:
         json.dump(entry, f, ensure_ascii=False)
-        f.write("\n") # 将固定格式的对话写入记忆文件
+        f.write("\n")
 
 # 加载历史对话的函数
 def load_history(): # 加载最近对话
     try:
-        with open(MEMORY_FILE, "r", encoding="utf-8") as f: # 读取上面记忆文件的位置
-            lines = f.readlines() # 阅读文件内容并赋值到lines这个变量
-            # 取最后10条（5轮对话）
-            recent = lines[-50:] if len(lines) >= 50 else lines #  读取{}行数的内容，如果小于{}行数的话则读取所有内容
-            history = [] # 创建空列表，将历史消息传给大模型
-            for line in recent: # 将记忆系统内的数据循环导入的到line
-                data = json.loads(line.strip()) # 读取所获得的文本，并剔除掉多余空格和换行符，并转成json格式
-                history.append({"role": "user", "content": data["user"]}) # 将历史对话添加进列表传给大模型
+        with open(MEMORY_FILE, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+            recent = lines[-50:] if len(lines) >= 50 else lines
+            history = []
+            for line in recent:
+                data = json.loads(line.strip())
+                history.append({"role": "user", "content": data["user"]})
                 history.append({"role": "assistant", "content": data["bot"]})
-            return history # 返回列表
+            return history
     except FileNotFoundError:
         return []
 
@@ -133,7 +132,7 @@ def chat_with_fu_jiang(user_input):
     client = OpenAI(api_key=api_key,base_url=BASE_URL)
 
     # 加载最近历史
-    history = load_history() # 获取历史对话函数所获得的对话
+    history = load_history()
     load_Characterfile = load_profile()
     system_prompt = build_system_prompt()
 
@@ -147,14 +146,14 @@ def chat_with_fu_jiang(user_input):
 
     # 调用 API
     response = client.chat.completions.create(
-        model="deepseek-v4-flash", # 指定模型
-        messages=messages, # 导入上面构建的完整对话列表
-        temperature=0.7,  # 让它更活泼一点
-        max_tokens= 2048, # 最大token为2048（求你了别烧太快）
+        model="deepseek-v4-flash",
+        messages=messages,
+        temperature=0.7,
+        max_tokens= 2048,
         frequency_penalty = 0.2,    
     )
 
-    reply = response.choices[0].message.content # 从返回的相应中提取ai的回答文本
+    reply = response.choices[0].message.content
 
     # 保存记忆
     save_conversation(user_input, reply)
