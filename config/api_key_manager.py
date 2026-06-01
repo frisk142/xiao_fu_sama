@@ -1,8 +1,9 @@
 import json
 import sys
 from config.paths import KEY_FILE
+import logging
 
-print(f"API密钥文件路径: {KEY_FILE}")
+log = logging.getLogger("XiaoFu")
 
 def save_api_key(key):
     with open(KEY_FILE, "w" , encoding= "utf-8") as f:

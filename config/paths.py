@@ -1,5 +1,4 @@
 import sys
-import os
 from pathlib import Path
 
 if getattr(sys, 'frozen', False):
@@ -14,4 +13,5 @@ MEMORY_FILE = str(base_dir / "xiao_fu_memory" / "xiao_fu_memory.json")
 KEY_FILE = str(base_dir / "config" / "api_key.json")
 COUNT_FILE = str(base_dir / "config" / "COUNT_file")
 DESKTOP_PET_FILE = str(base_dir / "Function" / "desktop_pet.py")
-ICON = str(base_dir / "config" / "xiaofu_sama.ico")
+ICON = str(base_dir / "icon" / "xiaofu_sama.ico")
+LOG = Path(base_dir)

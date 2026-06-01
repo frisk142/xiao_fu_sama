@@ -1,12 +1,8 @@
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent.parent))
-
-
 import os
 import sys
 import threading
 import json
+import logging
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QUrl, QObject, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
@@ -19,6 +15,11 @@ from config.paths import INDEX_FILE, ICON
 from config.api_key_manager import save_api_key, load_api_key
 from utils import resource_path
 
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+
+
+log = logging.getLogger("XiaoFu")
 
 # 通信桥接
 # 这里需要使用pyqt5的信号方式，子线程无法直接调用主线程的函数，所以需要要信号来传递数据，主线程接收到信号之后刷新ui
@@ -85,7 +86,7 @@ class DesktopPet(QMainWindow):
         window_h = self.window().height()
 
         x = desktop.width() - window_w + 160
-        y = desktop.height() - window_h + 170
+        y = desktop.height() - window_h + 170   
         self.move(x , y)
 
 
