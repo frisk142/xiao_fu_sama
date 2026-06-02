@@ -26,7 +26,7 @@ def setup_logger(name = "XiaoFu", log_level = logging.DEBUG, console_level = log
     console_handler.setLevel(console_level)
 
     # 定义日志格式
-    formatter = logging.Formatter("%(asctime)s | %(levelname)-8s | %(message)s")
+    formatter = logging.Formatter("%(asctime)s | %(filename)s:%(lineno)d | %(levelname)-8s | %(message)s")
     file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
 
