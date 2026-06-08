@@ -38,7 +38,8 @@
 
 ![小芙截图](screenshots/screenshots3.png)
 
-
+## 技术栈
+pyqt5. python. html. css. openai. 
   
 ## 指令
 
